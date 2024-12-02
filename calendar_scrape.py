@@ -7,7 +7,7 @@ url = 'https://app.squarespacescheduling.com/schedule.php?action=showCalendar&fu
 alert_months = []
 alert_days = []
 alert = False
-#open credentials file
+
 with open('credentials.crd', 'r') as f:
     creds = f.read().splitlines()
     token = creds[0]
@@ -48,14 +48,11 @@ for date_string in dates:
     tags = soup.find_all(attrs={'data-testid': 'activeUpcomingCalendarDay'})
     for tag in tags:
         the_year, the_month, _ = map(int, date_string.split('-'))
-        # Create a date object for the specified day
         target_date = datetime.date(the_year, the_month, int(tag.text))
-        # Check if the day is Friday (4) or Saturday (5)
-        if target_date.weekday() in (3,4, 5):
+        if target_date.weekday() in (4, 5):
             alert = True
             alert_months.append(the_month)
             alert_days.append(tag.text)
-#convert month integer to month name using datetime
 for month in alert_months:
     month_name = datetime.datetime(2023, month, 1).strftime('%B')
     alert_months[alert_months.index(month)] = month_name
